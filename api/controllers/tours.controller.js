@@ -3,7 +3,7 @@ import APIError from "./../utils/APIError.js";
 import asyncWrapper from "../utils/asyncWrapper.js";
 import Tour from "../models/tour.model.js";
 
-const isValidMongoId = (req, res, next) => {
+export const isValidMongoId = (req, res, next) => {
   const { id } = req.params;
   const isValidId = validator.isMongoId(id);
 

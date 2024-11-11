@@ -4,12 +4,17 @@ import {
   deleteTour,
   getAllTours,
   getSingleTour,
-  updateTour
+  updateTour,
+  isValidMongoId
 } from "../controllers/tours.controller.js";
 
 const router = Router();
 
 router.route("/").get(getAllTours).post(createTours);
-router.route("/:id").get(getSingleTour).patch(updateTour).delete(deleteTour);
+router
+  .route("/:id")
+  .get(isValidMongoId, getSingleTour)
+  .patch(isValidMongoId, updateTour)
+  .delete(isValidMongoId, deleteTour);
 
 export default router;
