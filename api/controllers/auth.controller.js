@@ -55,3 +55,36 @@ export const signInUser = asyncWrapper(async (req, res, next) => {
     user
   });
 });
+
+export const protectedRoute = asyncWrapper(async (req, res, next) => {
+  let token;
+
+  const { authorization } = req.headers;
+
+  if (!authorization || !authorization.startsWith("Bearer")) {
+    return next(new APIError("Please login to proceed", 401));
+  }
+  token = req.headers.authorization.split(" ")[1];
+
+  if (!token) {
+    return next(new APIError(`Your token is not valid please login`, 400));
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE_IN
+  });
+
+  const currUser = await User.findById(decoded.id);
+
+  if (!currUser) {
+    return next(
+      new APIError(
+        `Sorry the user with this id doesn't exist please login`,
+        400
+      )
+    );
+  }
+
+  req.user = currUser;
+  next();
+});
