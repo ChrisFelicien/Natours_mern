@@ -11,7 +11,7 @@ import { protectedRoute } from "../controllers/auth.controller.js";
 
 const router = Router();
 
-router.route("/").get(protectedRoute, getAllTours).post(createTours);
+router.route("/").get(getAllTours).post(createTours);
 router
   .route("/:id")
   .get(isValidMongoId, getSingleTour)
